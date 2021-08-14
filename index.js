@@ -15,5 +15,5 @@ const io = require('socket.io')(server, {
 });
 
 io.sockets.on('connection', (socket, opt) => {
-    
+    socket.emit('message', { msg: 'Welcome ' + socket.id });
 });
