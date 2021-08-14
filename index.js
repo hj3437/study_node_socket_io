@@ -15,5 +15,11 @@ const io = require('socket.io')(server, {
 });
 
 io.sockets.on('connection', (socket, opt) => {
+    // First Message
     socket.emit('message', { msg: 'Welcome ' + socket.id });
+
+    socket.on('rooms', function (fn) {
+        if (fn)
+            fn(Object.keys(socket.rooms));
+    });
 });

@@ -8,7 +8,9 @@
 
 <body>
     <h1>Chat Client</h1>
-
+    <div class="info-wrap">
+        <h2 class="id-info"></h2>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
@@ -17,8 +19,28 @@
             clientLogMsg('connect called');
         });
 
+        socket.emit('rooms', (rooms) => {
+            clientLogMsg('rooms >>> ' + rooms);
+        });
+
+        socket.on('message', (msgData) => {
+            clientLogMsg(msgData);
+
+            let msg = msgData.msg.trim();
+
+            const idInfo = document.querySelector('.id-info');
+
+            if (msg && msg.startsWith('Welcome ')) {
+                let subText = msg.substring(msg.lastIndexOf(' ') + 1);
+                idInfo.innerText = subText;
+
+            } else {
+                idInfo.innerText = 'Error'
+            }
+        });
+
         function clientLogMsg(contents) {
-            console.log(`[client]: ${Date()} ${contents}`);
+            console.log(`[client]: ${Date()} ${JSON.stringify(contents)}`);
         }
     </script>
 </body>
