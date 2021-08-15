@@ -4,20 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Socket.io</title>
+    <style>
+        input {
+            padding: 8px;
+            margin-top: 8px;
+        }
+
+        button {
+            padding: 8px;
+            margin-top: 8px;
+        }
+    </style>
 </head>
 
 <body>
     <h2>Chat <span id="connect_title"></span></h2>
     <h3>Room: <span id="room_title"></span></h3>
     <h3>Id: <span id="id_title"></span></h3>
+
     <div>
         <input type="text" id="room_id" value="square">
-        <button type="button" onclick="checkRoom()">Join Room</button>
+        <button type="button" onclick="joinRoom()">Join Room</button>
     </div>
 
     <div>
         <input type="text" id="chat_text" value="Message">
-        <button type="button" onclick="sendAll()">Send</button>
+        <button type="button" onclick="send()">Send</button>
     </div>
 
     <div id="chat_list"></div>
@@ -32,53 +44,38 @@
             document.querySelector('#connect_title').innerHTML = '✅';
         });
 
-        socket.on('message', (message) => {
-            console.log('[client] MSG: ', message.msg);
-            document.querySelector('#id_title').innerHTML = message.msg;
+        // id 
+        socket.on('display-id', (idData) => {
+            document.querySelector('#id_title').innerHTML = idData.id;
         });
 
-        function checkRoom() {
+        function joinRoom() {
+            // console.log('joinRoom()');
+
             const roomId = document.querySelector('#room_id').value;
-            // console.log('[client] checkRoom() room id : ', roomId);
+            // console.log('room id: ', roomId);
 
-            if (!roomId) {
-                alert('empty room id');
-                return
-            }
+            if (!roomId) alert('error');
 
-            joinRoom(roomId);
-        }
-
-        function joinRoom(roomId) {
-            console.log('[client] joinRoom() room id : ', roomId);
             socket.emit('join', roomId, () => {
-                console.log("[client] joined Room>>", roomId)
-
-                socket.emit('leave', joinedRoom, () => {
-                    console.log("[client] leave Room>>", joinedRoom)
-                });
+                // console.log('join fn()');
 
                 joinedRoom = roomId;
-
-                displayRooms();
-            });
+                document.querySelector('#room_title').innerHTML = joinedRoom;
+            })
         }
 
-        function displayRooms() {
-            console.log('joinedRoom', joinedRoom);
-            document.querySelector('#room_title').innerHTML = joinedRoom
-        }
-
-        function sendAll() {
+        function send() {
             const chatText = document.querySelector('#chat_text').value;
-            // console.log(chatText);
-            socket.emit('message', { roomId: joinedRoom, msg: chatText }, (result) => {
+            console.log(chatText);
+
+            socket.emit('message', { msg: chatText }, (result) => {
                 console.log('[client] SendAll Callback result: ', result);
 
                 const chatList = document.querySelector('#chat_list')
                 const div = document.createElement('div');
                 div.innerHTML = chatText;
-                
+
                 chatList.appendChild(div);
             });
         }
