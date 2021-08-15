@@ -16,15 +16,14 @@
         const socket = io();
 
         socket.on('connect', () => {
-            clientLogMsg('connect called');
+            clientLogMsg('connect called', '');
+
+            displayRooms();
         });
 
-        socket.emit('rooms', (rooms) => {
-            clientLogMsg('rooms >>> ' + rooms);
-        });
 
         socket.on('message', (msgData) => {
-            clientLogMsg(msgData);
+            clientLogMsg('message', msgData);
 
             let msg = msgData.msg.trim();
 
@@ -39,8 +38,14 @@
             }
         });
 
-        function clientLogMsg(contents) {
-            console.log(`[client]: ${Date()} ${JSON.stringify(contents)}`);
+        function displayRooms() {
+            socket.emit('rooms', (rooms) => {
+                clientLogMsg('rooms', rooms);                
+            });
+        }
+
+        function clientLogMsg(text, contents) {
+            console.log(`[client]: ${Date()} ${text} : ${JSON.stringify(contents)}`);
         }
     </script>
 </body>

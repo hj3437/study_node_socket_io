@@ -1,5 +1,10 @@
 # study_node_socket_io
-   
+
+# Case
+sockets.emit();
+sockets.on();
+
+
 # History  
 npm init  
 npm install express  

@@ -14,12 +14,20 @@ const io = require('socket.io')(server, {
     pingTimeout: 5000
 });
 
-io.sockets.on('connection', (socket, opt) => {
+io.sockets.on('connection', (socket) => {
     // First Message
     socket.emit('message', { msg: 'Welcome ' + socket.id });
 
     socket.on('rooms', function (fn) {
-        if (fn)
-            fn(Object.keys(socket.rooms));
+        if (fn) {
+            // empty = []
+            // Object.keys(socket.rooms);
+
+            // rooms: Map<Room, Set<SocketId>>
+            socket.rooms.forEach(element => {
+                console.log(element);
+                fn(element);
+            });
+        }
     });
 });
