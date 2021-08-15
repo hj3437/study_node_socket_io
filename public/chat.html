@@ -1,18 +1,36 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
     <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body>
-    <h3>id: <span class="io-id"></span></h3>
-    <input id="io-txt" type="text" value="">
-    <button onclick="send()">Sending message to all users</button>
+    <h3>Room: <span class="io-room">Select Room</span></h3>
+    <h3>Id: <span class="io-id"></span></h3>
+    
+    <div class="room-list">
+        <span>Room</span>
+        <button onclick="joinRoom('all')">All Room</button>
+        <button onclick="joinRoom('timber')">Timber Room</button>
+        <button onclick="joinRoom('square')">Square Room</button>
+    </div>
+
+    <div class="msg-wrap">
+        <span>Message</span>
+        <input id="io-txt" type="text" value="">
+        <button onclick="send()">Sending message to users</button>
+    </div>
+
     <div>
         <ol id="chat_list"></ol>
     </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>
