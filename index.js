@@ -1,10 +1,12 @@
 const express = require('express')
 
+const PORT = process.env.PORT || 5000
+
 const app = express()
 app.use(express.static('public'));
 
-const server = app.listen(3000, () => {
-    console.log('Start Express on 3000 port');
+const server = app.listen(PORT, () => {
+    console.log(`Start Express on ${PORT} port`);
 })
 
 const io = require('socket.io')(server, {
@@ -15,32 +17,16 @@ const io = require('socket.io')(server, {
 });
 
 io.sockets.on('connection', (socket) => {
-    // init id 
-    socket.emit('display-id', { id: socket.id });
+    console.log('[server] - connection');
 
-    // init room
-    // console.log('rooms : ', socket.rooms); // Set { <socket.id> }
-    // socket.join("square");
-    // console.log('rooms : ', socket.rooms)
+    socket.emit('uk-id', {ukid: socket.id});
 
-    // socket.on('message', (data, fn) => {
-    //     socket.to(data.roomId).emit('message', {room: data.roomId, msg:data.msg});
-    //     if(fn) fn();
-    // });
 
-    socket.on('join', (roomId, fn) => {
-        console.log('join');
-        console.log('rooms : ', socket.rooms); // Set { <socket.id> }
-        socket.join("square");
-        console.log('rooms : ', socket.rooms)
+    socket.join('square');
+    console.log(socket.rooms);
 
-        if (fn) {
-            fn();
-        }
-    });
-
-    socket.on('message', (data, fn) => {
-        socket.emit('message', {msg:data.msg});
-        fn();
+    socket.on('me', (data) => {
+        console.log('[server] - recevie:', data);
+        socket.broadcast.emit('message', data);
     });
 });
