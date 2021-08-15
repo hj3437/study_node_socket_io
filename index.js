@@ -30,4 +30,23 @@ io.sockets.on('connection', (socket) => {
             });
         }
     });
+
+    socket.on('join', (roomName, fn) => {
+        console.log('SERVER JOIN', roomName);
+    });
+
+    socket.on('message', (data, fn) => {
+        socket.broadcast.to(data.room).emit('message', { room: data.room, msg: data.msg });
+
+        if (fn)
+            fn(data.msg);
+    });
+
+    socket.on('direct-message', (socketId, msg) => {
+        console.log('direct-message FN CALLED', Date());
+        console.log('id: ', socketId);
+        console.log('msg: ', msg);
+
+        socket.to(socketId).emit('message', { id: socketId, msg: msg });
+    });
 });
