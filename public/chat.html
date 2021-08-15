@@ -4,109 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Chat</title>
-    <style>
-        input {
-            padding: 8px;
-            margin-top: 8px;
-        }
-        button {
-            width: 188px;
-            height: 60px;
-            margin-top: 8px;
-        }
-    </style>
 </head>
 
 <body>
-    <h1>Chat Client</h1>
-    <div class="info-wrap">
-        <h2>ID: <span class="id-info"></span></h2>
-    </div>
-
-    <div>
-        <input type="text" id="socket_id" placeholder="Id"><br>
-        <input type="text" id="socket_msg" placeholder="Text"><br>
-        <button onclick="messageOne()">Direct Message</button>
-        <button onclick="messageAll()">All Message</button>
-    </div>
+    <h1>Chat</h1>
+    
     <div id="chat_list"></div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
-
-        let defaultRoom = 'square'
-        let joinedRoom = null;
-
-        socket.on('connect', () => {
-            clientLogMsg('connect called', '');
-            
-            joinRoom(defaultRoom);
-
-            displayRooms();
-        });
-
-
-        socket.on('message', (msgData) => {
-            clientLogMsg('message', msgData);
-
-            let id = msgData.id
-            let msg = msgData.msg.trim();
-
-            const idInfo = document.querySelector('.id-info');
-
-            if (msg && msg.startsWith('Welcome ')) {
-                let subText = msg.substring(msg.lastIndexOf(' ') + 1);
-                idInfo.innerText = subText;
-            } else {
-                let div = document.createElement('div');
-                div.innerHTML = `${id} : ${msg}`
-
-                document.querySelector('#chat_list').appendChild(div);
-            }
-        });
-
-        function joinRoom(roomName){
-            socket.emit('join', roomName, ()=>{
-                socket.emit('leave', joinedRoom);
-                joinedRoom = roomName;
-                console.log('JOINED ROOM: ', joinedRoom);
-                displayRooms();
-            });
-        }
-
-        function displayRooms() {
-            socket.emit('rooms', (rooms) => {
-                clientLogMsg('rooms', rooms);
-            });
-        }
-
-        function clientLogMsg(text, contents) {
-            console.log(`[client]: ${Date()} ${text} : ${JSON.stringify(contents)}`);
-        }
-
-        function messageOne() {
-            const socketId = document.querySelector('#socket_id').value;
-            const socketMsg = document.querySelector('#socket_msg').value;
-
-            if (!socketId) {
-                return alert('Empty id');
-            } else if (!socketMsg) {
-                return alert('Empty Message');
-            }
-
-            socket.emit("direct-message", socketId, ' DM: ' + socketMsg);
-        }
-
-        function messageAll() {
-            const id = document.querySelector('.id-info').innerHTML;
-            const socketMsg = document.querySelector('#socket_msg').value;
-            socket.emit('message', { room: joinedRoom, msg: socketMsg }, function (ret) {
-                let div = document.createElement('div');
-                div.innerHTML = `${id} [ALL] : ${socketMsg}`
-
-                document.querySelector('#chat_list').appendChild(div);
-            });
-        }
     </script>
 </body>
 
