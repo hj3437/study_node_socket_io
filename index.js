@@ -5,6 +5,10 @@ const PORT = process.env.PORT || 5000
 const app = express()
 app.use(express.static('public'));
 
+app.get('/', function (req, res) {
+    res.redirect('/chat.html');
+  });
+
 const server = app.listen(PORT, () => {
     console.log(`Start Express on ${PORT} port`);
 })
