@@ -33,4 +33,7 @@ Create public/chat.html
   
 Document  
 https://socket.io/docs/v4/  
+
+## 이미지
+![](https://github.com/hj3437/study_node_socket_io/blob/main/capture/use.png)
   
