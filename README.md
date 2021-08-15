@@ -16,7 +16,14 @@ node.js, express, socket.io를 이용하여 만든 채팅 사이트 입니다.
 3. DB에 어떠한 데이터도 저장하지 않습니다. 새로고침시 모든 데이터가 사라집니다. 
 
   
-## History  
+## History   
+socket.io를 사용하기위해 찾은 것들 입니다.   
+node.js 설치, npm init / install / -g / -save   
+git 커밋방법    
+.gitignore 설정방법  
+(socket.io 검색시 나오는 블로그들은 socket.io가 예전버전이라 적용이 안되서) 공식문서로 작성하는 방법   
+heroku 배포  
+  
 npm init  
 npm install express  
 npm install socket.io  
