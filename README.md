@@ -3,7 +3,7 @@ node.js, express, socket.io를 이용하여 만든 채팅 사이트 입니다.
 
       
 ## 사용방법
-1. 두개 이상 브라우저가 필요합니다. 
+1. 두개 이상 새창이 필요합니다. 
 2. https://peaceful-headland-74173.herokuapp.com/ 에 접속합니다. 
 3. Room(All, Timber, Square) 버튼을 클릭합니다.   
 4. 메시지를 입력후 Sending message to users 버튼을 클릭합니다.
